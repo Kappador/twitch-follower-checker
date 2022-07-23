@@ -2,15 +2,16 @@ const vorpal = require("vorpal")();
 const fs = require("fs");
 let chalk = vorpal.chalk;
 let axios = require("axios");
-const { setTimeout } = require("timers");
 let cfgFile = fs.readFileSync("config.json");
 if (!cfgFile) {
   fs.writeFileSync("config.json", "{}");
 }
 let config = JSON.parse(cfgFile);
 
+console.log(chalk.green("https://discord.gg/kappa | https://discord.gg/kappahost\n"));
+
 if (Object.keys(config).length === 0) {
-  this.log(chalk.red("Please run 'setup' to configure the bot"));
+  console.log(chalk.red("Please run 'setup' to configure the bot"));
 }
 let latestCursor = null;
 if (config.cursor) {

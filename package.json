@@ -1,13 +1,10 @@
 {
-  "name": "js-twitch-follower-check",
+  "name": "twitch-follower-checker",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "Prints out your followers",
+  "main": "app.js",
   "keywords": [],
-  "author": "",
+  "author": "Kappador",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",
