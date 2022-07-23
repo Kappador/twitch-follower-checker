@@ -97,7 +97,7 @@ vorpal
       },
       {
         type: "list",
-        default: "0",
+        default: "1",
         name: "followers",
         message: "Choose bitch",
         choices: [
@@ -108,21 +108,27 @@ vorpal
       },
     ]);
 
-    result.account = config.tokens.map((token) => {if (token.displayName===result.account) return token})[0];
 
     if (result.followers == "2") {
       latestCursor = null;
       config.cursor = null;
       fs.writeFileSync("config.json", JSON.stringify(config, null, 2));
-      this.log(chalk.green("✓") + " Cleared recent check");
+      return this.log(chalk.green("✓") + " Cleared recent check");
     }
+
+    let retarded;
+    config.tokens.forEach(token => {
+      if (token.displayName == result.account) {
+        retarded = token;
+      }
+    })
 
     if (result.followers == "1") {
       let completeData = await returnChannelFollowers(
-        result.account,
+        retarded,
         latestCursor
       );
-
+      if (completeData.value === 1) return this.log("no followers")
       this.log(
         "Followers: " +
           chalk.cyan(
@@ -148,12 +154,12 @@ vorpal
           default: "35",
         },
       ]);
-
       let completeData = await returnChannelFollowers(
-        result.account,
+        retarded,
         latestCursor,
         result2.amount
       );
+      if (completeData.value === 1) return this.log("no followers")
 
       this.log(
         "Followers: " +
@@ -252,6 +258,7 @@ async function returnChannelFollowers(token, cursor = null, count = null) {
         }
       )
       .then((response) => {
+        if (response.data[0].data.user.followers.edges == null) return resolve({value: 1});
         let followers = response.data[0].data.user.followers;
         let data = {
           followers: followers.edges.map((follower) => {
